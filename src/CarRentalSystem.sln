@@ -1,0 +1,30 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 16
+VisualStudioVersion = 16.0.30114.105
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "src", "src", "{5C39C50F-36B5-4453-BE7C-C68F941B30A8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "CarRentalSystem.Domain", "CarRentalSystem.Domain\CarRentalSystem.Domain.csproj", "{16094B91-038C-4688-9636-1E00F2D11551}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{16094B91-038C-4688-9636-1E00F2D11551}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{16094B91-038C-4688-9636-1E00F2D11551}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{16094B91-038C-4688-9636-1E00F2D11551}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{16094B91-038C-4688-9636-1E00F2D11551}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{16094B91-038C-4688-9636-1E00F2D11551} = {5C39C50F-36B5-4453-BE7C-C68F941B30A8}
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {67A6C614-D88B-40E1-B78F-BAD4571B7E6D}
+	EndGlobalSection
+EndGlobal
