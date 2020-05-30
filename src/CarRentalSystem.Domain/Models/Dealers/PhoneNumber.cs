@@ -16,6 +16,10 @@
 
         public string Number { get; }
 
+        public static implicit operator string(PhoneNumber number) => number.Number;
+
+        public static implicit operator PhoneNumber(string number) => new PhoneNumber(number);
+
         private void Validate(string number)
         {
             if (!number.StartsWith(PhoneNumberFirstSymbol))

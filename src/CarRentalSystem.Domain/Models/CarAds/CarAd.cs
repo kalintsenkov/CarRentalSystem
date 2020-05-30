@@ -13,7 +13,9 @@
             string model,
             Category category,
             string imageUrl,
-            decimal pricePerDay)
+            decimal pricePerDay,
+            Options options,
+            bool isAvailable)
         {
             this.Validate(model, imageUrl, pricePerDay);
 
@@ -22,6 +24,8 @@
             this.Category = category;
             this.ImageUrl = imageUrl;
             this.PricePerDay = pricePerDay;
+            this.Options = options;
+            this.IsAvailable = isAvailable;
         }
 
         public Manufacturer Manufacturer { get; }
@@ -33,6 +37,8 @@
         public string ImageUrl { get; }
 
         public decimal PricePerDay { get; }
+
+        public Options Options { get; }
 
         public bool IsAvailable { get; private set; }
 
