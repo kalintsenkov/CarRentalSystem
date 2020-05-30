@@ -10,7 +10,7 @@
 
     public class Dealer : Entity<int>, IAggregateRoot
     {
-        private readonly ICollection<CarAd> carAds;
+        private readonly HashSet<CarAd> carAds;
 
         public Dealer(string name, PhoneNumber phoneNumber)
         {
@@ -18,6 +18,14 @@
 
             this.Name = name;
             this.PhoneNumber = phoneNumber;
+
+            this.carAds = new HashSet<CarAd>();
+        }
+
+        private Dealer(string name)
+        {
+            this.Name = name;
+            this.PhoneNumber = null!;
 
             this.carAds = new HashSet<CarAd>();
         }

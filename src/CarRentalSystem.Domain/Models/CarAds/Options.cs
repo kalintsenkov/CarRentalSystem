@@ -7,16 +7,21 @@
 
     public class Options : Entity<int>
     {
-        internal Options(
-            bool hasClimateControl, 
-            int numberOfSeats, 
-            TransmissionType transmissionType)
+        internal Options(bool hasClimateControl, int numberOfSeats, TransmissionType transmissionType)
         {
             this.Validate(numberOfSeats);
 
             this.HasClimateControl = hasClimateControl;
             this.NumberOfSeats = numberOfSeats;
             this.TransmissionType = transmissionType;
+        }
+
+        private Options(bool hasClimateControl, int numberOfSeats)
+        {
+            this.HasClimateControl = hasClimateControl;
+            this.NumberOfSeats = numberOfSeats;
+
+            this.TransmissionType = default!;
         }
 
         public bool HasClimateControl { get; }

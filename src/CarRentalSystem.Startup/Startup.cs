@@ -1,5 +1,6 @@
 namespace CarRentalSystem.Startup
 {
+    using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
@@ -12,7 +13,10 @@ namespace CarRentalSystem.Startup
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) => services.AddControllers();
+        public void ConfigureServices(IServiceCollection services) 
+            => services
+                .AddInfrastructure(this.Configuration)
+                .AddControllers();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
