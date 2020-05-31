@@ -7,7 +7,7 @@
     using static Domain.Models.ModelConstants.CarAd;
     using static Domain.Models.ModelConstants.Common;
 
-    public class CarAdConfiguration : IEntityTypeConfiguration<CarAd>
+    internal class CarAdConfiguration : IEntityTypeConfiguration<CarAd>
     {
         public void Configure(EntityTypeBuilder<CarAd> builder)
         {

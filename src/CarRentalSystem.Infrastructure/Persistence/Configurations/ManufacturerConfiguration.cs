@@ -6,7 +6,7 @@
 
     using static Domain.Models.ModelConstants.Common;
 
-    public class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
+    internal class ManufacturerConfiguration : IEntityTypeConfiguration<Manufacturer>
     {
         public void Configure(EntityTypeBuilder<Manufacturer> builder)
         {

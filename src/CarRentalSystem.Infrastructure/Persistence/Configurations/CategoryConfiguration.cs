@@ -7,7 +7,7 @@
     using static Domain.Models.ModelConstants.Common;
     using static Domain.Models.ModelConstants.Category;
 
-    public class CategoryConfiguration : IEntityTypeConfiguration<Category>
+    internal class CategoryConfiguration : IEntityTypeConfiguration<Category>
     {
         public void Configure(EntityTypeBuilder<Category> builder)
         {
