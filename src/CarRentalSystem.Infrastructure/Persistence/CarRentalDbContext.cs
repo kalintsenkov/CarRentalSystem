@@ -3,9 +3,11 @@
     using System.Reflection;
     using Domain.Models.CarAds;
     using Domain.Models.Dealers;
+    using Identity;
+    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
     using Microsoft.EntityFrameworkCore;
 
-    internal class CarRentalDbContext : DbContext
+    internal class CarRentalDbContext : IdentityDbContext<User>
     {
         public CarRentalDbContext(DbContextOptions<CarRentalDbContext> options)
             : base(options)

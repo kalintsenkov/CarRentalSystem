@@ -1,11 +1,13 @@
 namespace CarRentalSystem.Startup
 {
+    using Application;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
     using Microsoft.Extensions.Configuration;
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
+    using Web;
 
     public class Startup
     {
@@ -13,10 +15,11 @@ namespace CarRentalSystem.Startup
 
         public IConfiguration Configuration { get; }
 
-        public void ConfigureServices(IServiceCollection services) 
+        public void ConfigureServices(IServiceCollection services)
             => services
+                .AddApplication(this.Configuration)
                 .AddInfrastructure(this.Configuration)
-                .AddControllers();
+                .AddWebComponents();
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
@@ -29,7 +32,8 @@ namespace CarRentalSystem.Startup
                 .UseHttpsRedirection()
                 .UseRouting()
                 .UseAuthorization()
-                .UseEndpoints(endpoints => endpoints.MapControllers());
+                .UseEndpoints(endpoints => endpoints.MapControllers())
+                .Initialize();
         }
     }
 }
