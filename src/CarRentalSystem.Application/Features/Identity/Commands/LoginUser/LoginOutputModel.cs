@@ -1,4 +1,4 @@
-﻿namespace CarRentalSystem.Application.Features.Identity
+﻿namespace CarRentalSystem.Application.Features.Identity.Commands.LoginUser
 {
     public class LoginOutputModel
     {

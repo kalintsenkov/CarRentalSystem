@@ -9,6 +9,7 @@
     using Application;
     using Application.Contracts;
     using Application.Features.Identity;
+    using Application.Features.Identity.Commands.LoginUser;
     using Microsoft.AspNetCore.Identity;
     using Microsoft.Extensions.Options;
     using Microsoft.IdentityModel.Tokens;

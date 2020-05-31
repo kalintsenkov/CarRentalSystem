@@ -3,6 +3,7 @@
     using System.Text;
     using Application;
     using Application.Contracts;
+    using Application.Features.Identity;
     using Identity;
     using Microsoft.AspNetCore.Authentication.JwtBearer;
     using Microsoft.AspNetCore.Identity;
@@ -11,7 +12,6 @@
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.IdentityModel.Tokens;
     using Persistence;
-    using Persistence.Repositories;
 
     public static class InfrastructureConfiguration
     {
@@ -20,6 +20,7 @@
             IConfiguration configuration)
             => services
                 .AddDatabase(configuration)
+                .AddRepositories()
                 .AddIdentity(configuration);
 
         private static IServiceCollection AddDatabase(
@@ -29,10 +30,17 @@
                 .AddDbContext<CarRentalDbContext>(options => options
                     .UseSqlServer(
                         configuration.GetConnectionString("DefaultConnection"),
-                        b => b.MigrationsAssembly(typeof(CarRentalDbContext)
-                            .Assembly.FullName)))
-                .AddTransient<IInitializer, CarRentalDbInitializer>()
-                .AddTransient(typeof(IRepository<>), typeof(DataRepository<>));
+                        b => b.MigrationsAssembly(typeof(CarRentalDbContext).Assembly.FullName)))
+                .AddTransient<IInitializer, CarRentalDbInitializer>();
+
+        internal static IServiceCollection AddRepositories(this IServiceCollection services)
+            => services
+                .Scan(scan => scan
+                    .FromCallingAssembly()
+                    .AddClasses(classes => classes
+                        .AssignableTo(typeof(IRepository<>)))
+                    .AsMatchingInterface()
+                    .WithTransientLifetime());
 
         private static IServiceCollection AddIdentity(
             this IServiceCollection services,
