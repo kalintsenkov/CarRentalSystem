@@ -1,6 +1,7 @@
 namespace CarRentalSystem.Startup
 {
     using Application;
+    using Domain;
     using Infrastructure;
     using Microsoft.AspNetCore.Builder;
     using Microsoft.AspNetCore.Hosting;
@@ -17,6 +18,7 @@ namespace CarRentalSystem.Startup
 
         public void ConfigureServices(IServiceCollection services)
             => services
+                .AddDomain()
                 .AddApplication(this.Configuration)
                 .AddInfrastructure(this.Configuration)
                 .AddWebComponents();

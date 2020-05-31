@@ -8,7 +8,7 @@
 
     public class CarAd : Entity<int>, IAggregateRoot
     {
-        public CarAd(
+        internal CarAd(
             Manufacturer manufacturer,
             string model,
             Category category,
