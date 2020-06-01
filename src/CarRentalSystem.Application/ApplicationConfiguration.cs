@@ -1,6 +1,7 @@
 ﻿namespace CarRentalSystem.Application
 {
     using System.Reflection;
+    using AutoMapper;
     using Behaviours;
     using MediatR;
     using Microsoft.Extensions.Configuration;
@@ -15,6 +16,7 @@
                 .Configure<ApplicationSettings>(
                     configuration.GetSection(nameof(ApplicationSettings)),
                     options => options.BindNonPublicProperties = true)
+                .AddAutoMapper(Assembly.GetExecutingAssembly())
                 .AddMediatR(Assembly.GetExecutingAssembly())
                 .AddTransient(typeof(IPipelineBehavior<,>), typeof(RequestValidationBehavior<,>));
     }

@@ -28,7 +28,7 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectCapability Include="DynamicFileNesting"/>
+		<ProjectCapability Include="DynamicFileNesting" />
 	</ItemGroup>
 
 </Project>

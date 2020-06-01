@@ -6,12 +6,13 @@ namespace CarRentalSystem.Application.Features.CarAds
     using System.Threading.Tasks;
     using Contracts;
     using Domain.Models.CarAds;
+    using Domain.Specifications;
     using Queries.Search;
 
     public interface ICarAdRepository : IRepository<CarAd>
     {
         Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
-            string? manufacturer = default,
+            Specification<CarAd> specification,
             CancellationToken cancellationToken = default);
 
         Task<Category> GetCategory(
@@ -19,7 +20,7 @@ namespace CarRentalSystem.Application.Features.CarAds
             CancellationToken cancellationToken = default);
 
         Task<Manufacturer> GetManufacturer(
-            string manufacturerName, 
+            string manufacturerName,
             CancellationToken cancellationToken = default);
 
         Task<int> Total(CancellationToken cancellationToken = default);

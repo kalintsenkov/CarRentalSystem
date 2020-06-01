@@ -6,50 +6,37 @@
     using System.Threading.Tasks;
     using Application.Features.CarAds;
     using Application.Features.CarAds.Queries.Search;
+    using AutoMapper;
     using Domain.Models.CarAds;
+    using Domain.Specifications;
     using Microsoft.EntityFrameworkCore;
 
     internal class CarAdRepository : DataRepository<CarAd>, ICarAdRepository
     {
-        public CarAdRepository(CarRentalDbContext db)
+        private readonly IMapper mapper;
+
+        public CarAdRepository(CarRentalDbContext db, IMapper mapper)
             : base(db)
-        {
-        }
+            => this.mapper = mapper;
 
         public async Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
-            string? manufacturer = default,
+            Specification<CarAd> specification,
             CancellationToken cancellationToken = default)
-        {
-            var query = this.AllAvailable();
-
-            if (!string.IsNullOrWhiteSpace(manufacturer))
-            {
-                query = query
-                    .Where(car => EF
-                        .Functions
-                        .Like(car.Manufacturer.Name, $"%{manufacturer}%"));
-            }
-
-            return await query
-                .Select(car => new CarAdListingModel(
-                    car.Id,
-                    car.Manufacturer.Name,
-                    car.Model,
-                    car.ImageUrl,
-                    car.Category.Name,
-                    car.PricePerDay))
+            => await this.mapper
+                .ProjectTo<CarAdListingModel>(this
+                    .AllAvailable()
+                    .Where(specification))
                 .ToListAsync(cancellationToken);
-        }
 
         public async Task<Category> GetCategory(
-            int categoryId, 
+            int categoryId,
             CancellationToken cancellationToken = default)
             => await this.Data
                 .Categories
                 .FirstOrDefaultAsync(c => c.Id == categoryId, cancellationToken);
 
         public async Task<Manufacturer> GetManufacturer(
-            string manufacturerName, 
+            string manufacturerName,
             CancellationToken cancellationToken = default)
             => await this.Data
                 .Manufacturers
