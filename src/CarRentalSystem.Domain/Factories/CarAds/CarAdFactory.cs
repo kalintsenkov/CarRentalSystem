@@ -11,7 +11,6 @@
         private string carAdModel = default!;
         private string carAdImageUrl = default!;
         private decimal carAdPricePerDay = default!;
-        private bool carAdIsAvailable = default!;
 
         private bool manufacturerSet = false;
         private bool categorySet = false;
@@ -32,9 +31,6 @@
             this.carAdModel = model;
             return this;
         }
-
-        public ICarAdFactory WithCategory(string name, string description)
-            => this.WithCategory(new Category(name, description));
 
         public ICarAdFactory WithCategory(Category category)
         {
@@ -58,19 +54,6 @@
         public ICarAdFactory WithOptions(bool hasClimateControl, int numberOfSeats, TransmissionType transmissionType)
             => this.WithOptions(new Options(hasClimateControl, numberOfSeats, transmissionType));
 
-        public ICarAdFactory WithOptions(Options options)
-        {
-            this.carAdOptions = options;
-            this.optionsSet = true;
-            return this;
-        }
-
-        public ICarAdFactory IsAvailable(bool isAvailable = true)
-        {
-            this.carAdIsAvailable = isAvailable;
-            return this;
-        }
-
         public CarAd Build()
         {
             if (!this.manufacturerSet || !this.categorySet || !this.optionsSet)
@@ -85,7 +68,14 @@
                 this.carAdImageUrl,
                 this.carAdPricePerDay,
                 this.carAdOptions,
-                this.carAdIsAvailable);
+                true);
+        }
+
+        private ICarAdFactory WithOptions(Options options)
+        {
+            this.carAdOptions = options;
+            this.optionsSet = true;
+            return this;
         }
     }
 }

@@ -32,11 +32,16 @@
                 .ShouldReturn()
                 .ActionResult<LoginOutputModel>(result => result
                     .Passing(model => model.Token.Should().Be(token)));
-        [Fact]
-        public void RegisterShouldHaveCorrectAttributes()
+        [Theory]
+        [InlineData(
+            IdentityFakes.TestEmail,
+            IdentityFakes.ValidPassword,
+            IdentityFakes.ValidName,
+            IdentityFakes.ValidPhoneNumber)]
+        public void RegisterShouldHaveCorrectAttributes(string email, string password, string name, string phoneNumber)
             => MyController<IdentityController>
                 .Calling(c => c
-                    .Register(new RegisterUserCommand(With.No<string>(), With.No<string>())))
+                    .Register(new RegisterUserCommand(email, password, name, phoneNumber)))
                 .ShouldHave()
                 .ActionAttributes(attr => attr
                     .RestrictingForHttpMethod(HttpMethod.Post)

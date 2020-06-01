@@ -1,5 +1,7 @@
 ﻿namespace CarRentalSystem.Domain.Models.CarAds
 {
+    using System.Collections.Generic;
+    using System.Linq;
     using Common;
     using Exceptions;
 
@@ -8,6 +10,9 @@
 
     public class CarAd : Entity<int>, IAggregateRoot
     {
+        private static readonly IEnumerable<Category> AllowedCategories
+            = new CategoryData().GetData().Cast<Category>();
+
         internal CarAd(
             Manufacturer manufacturer,
             string model,
@@ -18,6 +23,7 @@
             bool isAvailable)
         {
             this.Validate(model, imageUrl, pricePerDay);
+            this.ValidateCategory(category);
 
             this.Manufacturer = manufacturer;
             this.Model = model;
@@ -64,7 +70,7 @@
         {
             Guard.ForStringLength<InvalidCarAdException>(
                 model,
-                MinModelLength, 
+                MinModelLength,
                 MaxModelLength,
                 nameof(this.Model));
 
@@ -77,6 +83,21 @@
                 Zero,
                 decimal.MaxValue,
                 nameof(this.PricePerDay));
+        }
+
+        private void ValidateCategory(Category category)
+        {
+            var categoryName = category.Name;
+
+            if (AllowedCategories.Any(c => c.Name == categoryName))
+            {
+                return;
+            }
+
+            var allowedCategoryNames = string.Join(", ", AllowedCategories.Select(c => $"'{c.Name}'"));
+
+            throw new InvalidCategoryException(
+                $"'{categoryName}' is not a valid category. Allowed values are: {allowedCategoryNames}.");
         }
     }
 }

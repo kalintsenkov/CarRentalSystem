@@ -18,7 +18,7 @@
             => MyPipeline
                 .Configuration()
                 .ShouldMap("/CarAds")
-                .To<CarAdsController>(c => c.Get(With.Empty<SearchCarAdsQuery>()))
+                .To<CarAdsController>(c => c.Search(With.Empty<SearchCarAdsQuery>()))
                 .Which(instance => instance
                     .WithData(A.CollectionOfDummy<CarAd>(totalCarAds)))
                 .ShouldReturn()
@@ -31,7 +31,7 @@
             => MyPipeline
                 .Configuration()
                 .ShouldMap("/CarAds")
-                .To<CarAdsController>(c => c.Get(With.Empty<SearchCarAdsQuery>()))
+                .To<CarAdsController>(c => c.Search(With.Empty<SearchCarAdsQuery>()))
                 .Which(instance => instance
                     .WithData(CarAdFakes.Data.GetCarAds()))
                 .ShouldReturn()
@@ -42,7 +42,7 @@
         [Fact]
         public void GetShouldHaveCorrectAttributes()
             => MyController<CarAdsController>
-                .Calling(c => c.Get(With.Default<SearchCarAdsQuery>()))
+                .Calling(c => c.Search(With.Default<SearchCarAdsQuery>()))
                 .ShouldHave()
                 .ActionAttributes(attr => attr
                     .RestrictingForHttpMethod(HttpMethod.Get));

@@ -14,7 +14,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} cannot be null ot empty.");
+            ThrowException<TException>($"'{name}' cannot be null ot empty.");
         }
 
         public static void ForStringLength<TException>(string value, int minLength, int maxLength, string name = "Value")
@@ -27,7 +27,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} must have between {minLength} and {maxLength} symbols.");
+            ThrowException<TException>($"'{name}' must have between {minLength} and {maxLength} symbols.");
         }
 
         public static void AgainstOutOfRange<TException>(int number, int min, int max, string name = "Value")
@@ -38,7 +38,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} must be between {min} and {max}.");
+            ThrowException<TException>($"'{name}' must be between {min} and {max}.");
         }
 
         public static void AgainstOutOfRange<TException>(decimal number, decimal min, decimal max, string name = "Value")
@@ -49,7 +49,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} must be between {min} and {max}.");
+            ThrowException<TException>($"'{name}' must be between {min} and {max}.");
         }
 
         public static void ForValidUrl<TException>(string url, string name = "Value")
@@ -61,7 +61,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} must be a valid URL.");
+            ThrowException<TException>($"'{name}' must be a valid URL.");
         }
 
 
@@ -73,7 +73,7 @@
                 return;
             }
 
-            ThrowException<TException>($"{name} must not be {unexpectedValue}.");
+            ThrowException<TException>($"'{name}' must not be {unexpectedValue}.");
         }
 
         private static void ThrowException<TException>(string message)

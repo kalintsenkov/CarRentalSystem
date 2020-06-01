@@ -20,7 +20,7 @@
             this.jwtTokenGenerator = jwtTokenGenerator;
         }
 
-        public async Task<Result> Register(UserInputModel userInput)
+        public async Task<Result<IUser>> Register(UserInputModel userInput)
         {
             var user = new User(userInput.Email);
 
@@ -29,8 +29,8 @@
             var errors = identityResult.Errors.Select(e => e.Description);
 
             return identityResult.Succeeded
-                ? Result.Success
-                : Result.Failure(errors);
+                ? Result<IUser>.SuccessWith(user)
+                : Result<IUser>.Failure(errors);
         }
 
         public async Task<Result<LoginOutputModel>> Login(UserInputModel userInput)

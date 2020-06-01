@@ -1,5 +1,6 @@
 ﻿namespace CarRentalSystem.Domain.Models.Dealers
 {
+    using System.Text.RegularExpressions;
     using Common;
     using Exceptions;
 
@@ -22,16 +23,16 @@
 
         private void Validate(string number)
         {
-            if (!number.StartsWith(PhoneNumberFirstSymbol))
+            if (!Regex.IsMatch(number, PhoneNumberRegularExpression))
             {
-                throw new InvalidPhoneNumberException($"Phone number must start with a '{PhoneNumberFirstSymbol}'.");
+                throw new InvalidPhoneNumberException("Phone number must start with a '+' and contain only digits afterwards.");
             }
 
             Guard.ForStringLength<InvalidPhoneNumberException>(
                 number,
                 MinPhoneNumberLength,
                 MaxPhoneNumberLength,
-                nameof(this.Number));
+                nameof(PhoneNumber));
         }
     }
 }

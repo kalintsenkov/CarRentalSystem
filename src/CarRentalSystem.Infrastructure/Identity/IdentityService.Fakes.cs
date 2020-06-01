@@ -7,6 +7,8 @@
     {
         public const string TestEmail = "test@test.com";
         public const string ValidPassword = "TestPass";
+        public const string ValidName = "TestName";
+        public const string ValidPhoneNumber = "+1234567890";
 
         public static UserManager<User> FakeUserManager
         {

@@ -22,9 +22,13 @@
 	</ItemGroup>
 
 	<ItemGroup>
-	  <PackageReference Include="Bogus" Version="29.0.2" />
-	  <PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
-	  <PackageReference Include="Scrutor" Version="3.2.1" />
+		<PackageReference Include="Bogus" Version="29.0.2" />
+		<PackageReference Include="Microsoft.Extensions.DependencyInjection" Version="3.1.4" />
+		<PackageReference Include="Scrutor" Version="3.2.1" />
+	</ItemGroup>
+
+	<ItemGroup>
+		<ProjectCapability Include="DynamicFileNesting"/>
 	</ItemGroup>
 
 </Project>

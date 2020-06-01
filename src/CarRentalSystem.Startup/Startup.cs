@@ -9,6 +9,7 @@ namespace CarRentalSystem.Startup
     using Microsoft.Extensions.DependencyInjection;
     using Microsoft.Extensions.Hosting;
     using Web;
+    using Web.Middleware;
 
     public class Startup
     {
@@ -31,8 +32,10 @@ namespace CarRentalSystem.Startup
             }
 
             app
+                .UseValidationExceptionHandler()
                 .UseHttpsRedirection()
                 .UseRouting()
+                .UseAuthentication()
                 .UseAuthorization()
                 .UseEndpoints(endpoints => endpoints.MapControllers())
                 .Initialize();
