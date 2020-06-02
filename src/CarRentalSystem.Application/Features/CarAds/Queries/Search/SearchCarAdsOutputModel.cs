@@ -4,7 +4,9 @@
 
     public class SearchCarAdsOutputModel
     {
-        internal SearchCarAdsOutputModel(IEnumerable<CarAdListingModel> carAds, int total)
+        public SearchCarAdsOutputModel(
+            IEnumerable<CarAdListingModel> carAds, 
+            int total)
         {
             this.CarAds = carAds;
             this.Total = total;

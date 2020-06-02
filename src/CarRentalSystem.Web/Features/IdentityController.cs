@@ -9,12 +9,14 @@
     {
         [HttpPost]
         [Route(nameof(Register))]
-        public async Task<ActionResult> Register(RegisterUserCommand command)
+        public async Task<ActionResult> Register(
+            RegisterUserCommand command)
             => await this.Send(command);
 
         [HttpPost]
         [Route(nameof(Login))]
-        public async Task<ActionResult<LoginOutputModel>> Login(LoginUserCommand command)
+        public async Task<ActionResult<LoginOutputModel>> Login(
+            LoginUserCommand command)
             => await this.Send(command);
     }
 }
