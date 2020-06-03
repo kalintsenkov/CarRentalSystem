@@ -30,13 +30,25 @@
             this.carAds = new HashSet<CarAd>();
         }
 
-        public string Name { get; }
+        public string Name { get; private set; }
 
-        public PhoneNumber PhoneNumber { get; }
+        public PhoneNumber PhoneNumber { get; private set; }
 
         public IReadOnlyCollection<CarAd> CarAds => this.carAds.ToList().AsReadOnly();
 
         public void AddCarAd(CarAd carAd) => this.carAds.Add(carAd);
+
+        public Dealer EditName(string name)
+        {
+            this.Name = name;
+            return this;
+        }
+
+        public Dealer EditPhoneNumber(string phoneNumber)
+        {
+            this.PhoneNumber = phoneNumber;
+            return this;
+        }
 
         private void Validate(string name)
             => Guard.ForStringLength<InvalidDealerException>(
