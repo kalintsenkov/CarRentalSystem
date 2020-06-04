@@ -1,7 +1,9 @@
 ﻿namespace CarRentalSystem.Web.Features
 {
+    using System.Collections.Generic;
     using System.Threading.Tasks;
     using Application.Features.CarAds.Commands.Create;
+    using Application.Features.CarAds.Queries.Categories;
     using Application.Features.CarAds.Queries.Search;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -11,6 +13,11 @@
         [HttpGet]
         public async Task<ActionResult<SearchCarAdsOutputModel>> Search(
             [FromQuery] SearchCarAdsQuery query)
+            => await this.Send(query);
+
+        [HttpGet(nameof(Categories))]
+        public async Task<ActionResult<IEnumerable<CategoriesCarAdsOutputModel>>> Categories(
+            CategoriesCarAdsQuery query)
             => await this.Send(query);
 
         [HttpPost]

@@ -7,6 +7,7 @@ namespace CarRentalSystem.Application.Features.CarAds
     using Contracts;
     using Domain.Models.CarAds;
     using Domain.Specifications;
+    using Queries.Categories;
     using Queries.Search;
 
     public interface ICarAdRepository : IRepository<CarAd>
@@ -24,5 +25,8 @@ namespace CarRentalSystem.Application.Features.CarAds
             CancellationToken cancellationToken = default);
 
         Task<int> Total(CancellationToken cancellationToken = default);
+
+        Task<IEnumerable<CategoriesCarAdsOutputModel>> GetCarAdCategories(
+            CancellationToken cancellationToken = default);
     }
 }

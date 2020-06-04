@@ -5,6 +5,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Features.CarAds;
+    using Application.Features.CarAds.Queries.Categories;
     using Application.Features.CarAds.Queries.Search;
     using AutoMapper;
     using Domain.Models.CarAds;
@@ -46,6 +47,27 @@
             => await this
                 .AllAvailable()
                 .CountAsync(cancellationToken);
+
+        public async Task<IEnumerable<CategoriesCarAdsOutputModel>> GetCarAdCategories(
+            CancellationToken cancellationToken = default)
+        {
+            var categories = await this.mapper
+                .ProjectTo<CategoriesCarAdsOutputModel>(this.Data.Categories)
+                .ToDictionaryAsync(k => k.Id, cancellationToken);
+
+            var carAdsPerCategory = await this.AllAvailable()
+                .GroupBy(c => c.Category.Id)
+                .Select(gr => new
+                {
+                    CategoryId = gr.Key,
+                    TotalCarAds = gr.Count()
+                })
+                .ToListAsync(cancellationToken);
+
+            carAdsPerCategory.ForEach(c => categories[c.CategoryId].TotalCarAds = c.TotalCarAds);
+
+            return categories.Values;
+        }
 
         private IQueryable<CarAd> AllAvailable()
             => this
