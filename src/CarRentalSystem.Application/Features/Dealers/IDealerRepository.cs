@@ -4,12 +4,17 @@
     using System.Threading.Tasks;
     using Contracts;
     using Domain.Models.Dealers;
+    using Queries.Common;
     using Queries.Details;
 
     public interface IDealerRepository : IRepository<Dealer>
     {
         Task<DealerDetailsOutputModel> GetDetails(
             int id, 
+            CancellationToken cancellationToken = default);
+
+        Task<DealerOutputModel> GetDetailsByCarId(
+            int carAdId, 
             CancellationToken cancellationToken = default);
 
         Task<Dealer> FindByUser(

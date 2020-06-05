@@ -6,6 +6,7 @@
     using System.Threading.Tasks;
     using Application.Features.CarAds;
     using Application.Features.CarAds.Queries.Categories;
+    using Application.Features.CarAds.Queries.Details;
     using Application.Features.CarAds.Queries.Search;
     using AutoMapper;
     using Domain.Models.CarAds;
@@ -47,6 +48,15 @@
             => await this
                 .AllAvailable()
                 .CountAsync(cancellationToken);
+
+        public async Task<DetailsCarAdOutputModel> GetDetails(
+            int id,
+            CancellationToken cancellationToken = default)
+            => await this.mapper
+                .ProjectTo<DetailsCarAdOutputModel>(this
+                    .AllAvailable()
+                    .Where(c => c.Id == id))
+                .FirstOrDefaultAsync(cancellationToken);
 
         public async Task<IEnumerable<CategoriesCarAdsOutputModel>> GetCarAdCategories(
             CancellationToken cancellationToken = default)

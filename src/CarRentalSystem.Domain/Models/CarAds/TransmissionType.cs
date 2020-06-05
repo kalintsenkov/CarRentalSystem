@@ -8,7 +8,7 @@
         public static readonly TransmissionType Automatic = new TransmissionType(2, nameof(Automatic));
 
         private TransmissionType(int value)
-            : base(value)
+            : base(value, FromValue<TransmissionType>(value).Name)
         {
         }
 

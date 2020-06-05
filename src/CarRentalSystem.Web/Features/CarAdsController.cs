@@ -4,6 +4,7 @@
     using System.Threading.Tasks;
     using Application.Features.CarAds.Commands.Create;
     using Application.Features.CarAds.Queries.Categories;
+    using Application.Features.CarAds.Queries.Details;
     using Application.Features.CarAds.Queries.Search;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
@@ -13,6 +14,11 @@
         [HttpGet]
         public async Task<ActionResult<SearchCarAdsOutputModel>> Search(
             [FromQuery] SearchCarAdsQuery query)
+            => await this.Send(query);
+
+        [HttpGet(Id)]
+        public async Task<ActionResult<DetailsCarAdOutputModel>> Details(
+            [FromRoute] DetailsCarAdQuery query)
             => await this.Send(query);
 
         [HttpGet(nameof(Categories))]

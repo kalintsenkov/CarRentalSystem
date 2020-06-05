@@ -6,6 +6,7 @@
     using System.Threading;
     using System.Threading.Tasks;
     using Application.Features.Dealers;
+    using Application.Features.Dealers.Queries.Common;
     using Application.Features.Dealers.Queries.Details;
     using AutoMapper;
     using Domain.Exceptions;
@@ -21,12 +22,24 @@
             : base(db)
             => this.mapper = mapper;
 
-        public async Task<DealerDetailsOutputModel> GetDetails(int id, CancellationToken cancellationToken = default)
+        public async Task<DealerDetailsOutputModel> GetDetails(
+            int id,
+            CancellationToken cancellationToken = default)
             => await this.mapper
                 .ProjectTo<DealerDetailsOutputModel>(this
-                    .Data.Dealers
+                    .All()
+                    .AsNoTracking()
                     .Where(d => d.Id == id))
                 .FirstOrDefaultAsync(cancellationToken);
+
+        public async Task<DealerOutputModel> GetDetailsByCarId(
+            int carAdId,
+            CancellationToken cancellationToken = default)
+            => await this.mapper
+                .ProjectTo<DealerOutputModel>(this
+                    .All()
+                    .Where(d => d.CarAds.Any(c => c.Id == carAdId)))
+                .SingleOrDefaultAsync(cancellationToken);
 
         public Task<Dealer> FindByUser(
             string userId,
