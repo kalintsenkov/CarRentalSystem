@@ -15,11 +15,11 @@
 	</ItemGroup>
 
 	<ItemGroup>
-		<ProjectReference Include="..\CarRentalSystem.Domain\CarRentalSystem.Domain.csproj" />
+	  <Folder Include="Behaviours\" />
 	</ItemGroup>
 
 	<ItemGroup>
-	  <Folder Include="Behaviours\" />
+	  <ProjectReference Include="..\Domain\CarRentalSystem.Domain.csproj" />
 	</ItemGroup>
 
 </Project>
