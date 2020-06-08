@@ -6,6 +6,7 @@
     using Application.Features.CarAds.Queries.Categories;
     using Application.Features.CarAds.Queries.Details;
     using Application.Features.CarAds.Queries.Search;
+    using CarRentalSystem.Application.Features.CarAds.Commands.Delete;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
@@ -30,6 +31,12 @@
         [Authorize]
         public async Task<ActionResult<CreateCarAdOutputModel>> Create(
             CreateCarAdCommand command)
+            => await this.Send(command);
+
+        [HttpDelete(Id)]
+        [Authorize]
+        public async Task<ActionResult> Delete(
+            [FromRoute] DeleteCarAdCommand command)
             => await this.Send(command);
     }
 }

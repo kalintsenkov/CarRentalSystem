@@ -21,6 +21,20 @@
             : base(db)
             => this.mapper = mapper;
 
+        public async Task<bool> Delete(int id, CancellationToken cancellationToken = default)
+        {
+            var carAd = await this.Data.CarAds.FindAsync(id);
+            if (carAd == null)
+            {
+                return false;
+            }
+
+            this.Data.CarAds.Remove(carAd);
+            await this.Data.SaveChangesAsync(cancellationToken);
+
+            return true;
+        }
+
         public async Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
             Specification<CarAd> specification,
             CancellationToken cancellationToken = default)
@@ -29,6 +43,15 @@
                     .AllAvailable()
                     .Where(specification))
                 .ToListAsync(cancellationToken);
+
+        public async Task<DetailsCarAdOutputModel> GetDetails(
+            int id,
+            CancellationToken cancellationToken = default)
+            => await this.mapper
+                .ProjectTo<DetailsCarAdOutputModel>(this
+                    .AllAvailable()
+                    .Where(c => c.Id == id))
+                .FirstOrDefaultAsync(cancellationToken);
 
         public async Task<Category> GetCategory(
             int categoryId,
@@ -48,15 +71,6 @@
             => await this
                 .AllAvailable()
                 .CountAsync(cancellationToken);
-
-        public async Task<DetailsCarAdOutputModel> GetDetails(
-            int id,
-            CancellationToken cancellationToken = default)
-            => await this.mapper
-                .ProjectTo<DetailsCarAdOutputModel>(this
-                    .AllAvailable()
-                    .Where(c => c.Id == id))
-                .FirstOrDefaultAsync(cancellationToken);
 
         public async Task<IEnumerable<CategoriesCarAdsOutputModel>> GetCarAdCategories(
             CancellationToken cancellationToken = default)

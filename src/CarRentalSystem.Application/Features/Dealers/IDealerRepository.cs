@@ -9,12 +9,21 @@
 
     public interface IDealerRepository : IRepository<Dealer>
     {
+        Task<bool> HasCarAd(
+            int dealerId,
+            int carAdId,
+            CancellationToken cancellationToken = default);
+
         Task<DealerDetailsOutputModel> GetDetails(
             int id, 
             CancellationToken cancellationToken = default);
 
         Task<DealerOutputModel> GetDetailsByCarId(
             int carAdId, 
+            CancellationToken cancellationToken = default);
+
+        Task<int> GetDealerId(
+            string userId,
             CancellationToken cancellationToken = default);
 
         Task<Dealer> FindByUser(

@@ -22,6 +22,16 @@
             : base(db)
             => this.mapper = mapper;
 
+        public async Task<bool> HasCarAd(
+            int dealerId,
+            int carAdId,
+            CancellationToken cancellationToken = default)
+            => await this
+                .All()
+                .Where(d => d.Id == dealerId)
+                .AnyAsync(d => d.CarAds
+                    .Any(c => c.Id == carAdId), cancellationToken);
+
         public async Task<DealerDetailsOutputModel> GetDetails(
             int id,
             CancellationToken cancellationToken = default)
@@ -40,6 +50,11 @@
                     .All()
                     .Where(d => d.CarAds.Any(c => c.Id == carAdId)))
                 .SingleOrDefaultAsync(cancellationToken);
+
+        public Task<int> GetDealerId(
+            string userId,
+            CancellationToken cancellationToken = default)
+            => this.FindByUser(userId, user => user.Dealer!.Id, cancellationToken);
 
         public Task<Dealer> FindByUser(
             string userId,

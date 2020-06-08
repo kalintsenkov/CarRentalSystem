@@ -13,8 +13,8 @@ namespace CarRentalSystem.Application.Features.CarAds
 
     public interface ICarAdRepository : IRepository<CarAd>
     {
-        Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
-            Specification<CarAd> specification,
+        Task<bool> Delete(
+            int id, 
             CancellationToken cancellationToken = default);
 
         Task<Category> GetCategory(
@@ -25,7 +25,9 @@ namespace CarRentalSystem.Application.Features.CarAds
             string manufacturerName,
             CancellationToken cancellationToken = default);
 
-        Task<int> Total(CancellationToken cancellationToken = default);
+        Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
+            Specification<CarAd> specification,
+            CancellationToken cancellationToken = default);
 
         Task<DetailsCarAdOutputModel> GetDetails(
             int id,
@@ -33,5 +35,7 @@ namespace CarRentalSystem.Application.Features.CarAds
 
         Task<IEnumerable<CategoriesCarAdsOutputModel>> GetCarAdCategories(
             CancellationToken cancellationToken = default);
+
+        Task<int> Total(CancellationToken cancellationToken = default);
     }
 }
