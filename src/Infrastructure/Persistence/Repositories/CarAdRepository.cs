@@ -35,6 +35,13 @@
             return true;
         }
 
+        public async Task<CarAd> Find(
+            int id, 
+            CancellationToken cancellationToken = default)
+            => await this
+                .All()
+                .FirstOrDefaultAsync(c => c.Id == id, cancellationToken);
+
         public async Task<IEnumerable<CarAdListingModel>> GetCarAdListings(
             Specification<CarAd> specification,
             CancellationToken cancellationToken = default)
@@ -43,7 +50,7 @@
                     .AllAvailable()
                     .Where(specification))
                 .ToListAsync(cancellationToken);
-
+                
         public async Task<DetailsCarAdOutputModel> GetDetails(
             int id,
             CancellationToken cancellationToken = default)

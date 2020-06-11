@@ -17,6 +17,10 @@ namespace CarRentalSystem.Application.Features.CarAds
             int id, 
             CancellationToken cancellationToken = default);
 
+        Task<CarAd> Find(
+            int id,
+            CancellationToken cancellationToken = default);
+
         Task<Category> GetCategory(
             int categoryId,
             CancellationToken cancellationToken = default);

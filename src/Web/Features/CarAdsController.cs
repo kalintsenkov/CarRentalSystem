@@ -2,6 +2,7 @@
 {
     using System.Collections.Generic;
     using System.Threading.Tasks;
+    using Application.Features.CarAds.Commands.ChangeAvailability;
     using Application.Features.CarAds.Commands.Create;
     using Application.Features.CarAds.Queries.Categories;
     using Application.Features.CarAds.Queries.Details;
@@ -31,6 +32,12 @@
         [Authorize]
         public async Task<ActionResult<CreateCarAdOutputModel>> Create(
             CreateCarAdCommand command)
+            => await this.Send(command);
+
+        [HttpPut(Id + Slash + nameof(ChangeAvailability))]
+        [Authorize]
+        public async Task<ActionResult> ChangeAvailability(
+            [FromRoute] ChangeAvailabilityCarAdCommand command)
             => await this.Send(command);
 
         [HttpDelete(Id)]
