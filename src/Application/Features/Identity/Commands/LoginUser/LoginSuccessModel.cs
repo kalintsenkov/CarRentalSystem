@@ -1,14 +1,14 @@
 ﻿namespace CarRentalSystem.Application.Features.Identity.Commands.LoginUser
 {
-    public class LoginOutputModel
+    public class LoginSuccessModel
     {
-        public LoginOutputModel(int dealerId, string token)
+        public LoginSuccessModel(string userId, string token)
         {
-            this.DealerId = dealerId;
+            this.UserId = userId;
             this.Token = token;
         }
 
-        public int DealerId { get; }
+        public string UserId { get; }
 
         public string Token { get; }
     }

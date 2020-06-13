@@ -7,6 +7,6 @@
     {
         Task<Result<IUser>> Register(UserInputModel userInput);
 
-        Task<Result<LoginOutputModel>> Login(UserInputModel userInput);
+        Task<Result<LoginSuccessModel>> Login(UserInputModel userInput);
     }
 }
