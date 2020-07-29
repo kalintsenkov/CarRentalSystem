@@ -7,7 +7,7 @@
     using Application.Features.CarAds.Queries.Categories;
     using Application.Features.CarAds.Queries.Details;
     using Application.Features.CarAds.Queries.Search;
-    using CarRentalSystem.Application.Features.CarAds.Commands.Delete;
+    using Application.Features.CarAds.Commands.Delete;
     using Microsoft.AspNetCore.Authorization;
     using Microsoft.AspNetCore.Mvc;
 
