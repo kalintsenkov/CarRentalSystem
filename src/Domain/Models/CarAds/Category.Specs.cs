@@ -1,30 +1,29 @@
-﻿namespace CarRentalSystem.Domain.Models.CarAds
+﻿namespace CarRentalSystem.Domain.Models.CarAds;
+
+using System;
+using Exceptions;
+using FluentAssertions;
+using Xunit;
+
+public class CategorySpecs
 {
-    using System;
-    using Exceptions;
-    using FluentAssertions;
-    using Xunit;
-
-    public class CategorySpecs
+    [Fact]
+    public void ValidCategoryShouldNotThrowException()
     {
-        [Fact]
-        public void ValidCategoryShouldNotThrowException()
-        {
-            // Act
-            Action act = () => new Category("Valid name", "Valid description text");
+        // Act
+        Action act = () => new Category("Valid name", "Valid description text");
 
-            // Assert
-            act.Should().NotThrow<InvalidCategoryException>();
-        }
+        // Assert
+        act.Should().NotThrow<InvalidCategoryException>();
+    }
 
-        [Fact]
-        public void InvalidNameShouldThrowException()
-        {
-            // Act
-            Action act = () => new Category("", "Valid description text");
+    [Fact]
+    public void InvalidNameShouldThrowException()
+    {
+        // Act
+        Action act = () => new Category("", "Valid description text");
 
-            // Assert
-            act.Should().Throw<InvalidCategoryException>();
-        }
+        // Assert
+        act.Should().Throw<InvalidCategoryException>();
     }
 }

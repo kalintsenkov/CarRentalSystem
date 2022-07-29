@@ -1,11 +1,10 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
-{
-    public class InvalidCategoryException : BaseDomainException
-    {
-        public InvalidCategoryException()
-        {
-        }
+﻿namespace CarRentalSystem.Domain.Exceptions;
 
-        public InvalidCategoryException(string message) => this.Message = message;
+public class InvalidCategoryException : BaseDomainException
+{
+    public InvalidCategoryException()
+    {
     }
+
+    public InvalidCategoryException(string error) => this.Error = error;
 }

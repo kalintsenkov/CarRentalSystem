@@ -1,24 +1,23 @@
-﻿namespace CarRentalSystem.Infrastructure.Persistence.Repositories
+﻿namespace CarRentalSystem.Infrastructure.Persistence.Repositories;
+
+using System.Linq;
+using System.Threading;
+using System.Threading.Tasks;
+using Application.Contracts;
+using Domain.Common;
+
+internal abstract class DataRepository<TEntity> : IRepository<TEntity>
+    where TEntity : class, IAggregateRoot
 {
-    using System.Linq;
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Application.Contracts;
-    using Domain.Common;
+    protected DataRepository(CarRentalDbContext data) => this.Data = data;
 
-    internal abstract class DataRepository<TEntity> : IRepository<TEntity>
-        where TEntity : class, IAggregateRoot
+    protected CarRentalDbContext Data { get; }
+
+    protected IQueryable<TEntity> All() => this.Data.Set<TEntity>();
+
+    public async Task Save(TEntity entity, CancellationToken cancellationToken = default)
     {
-        protected DataRepository(CarRentalDbContext data) => this.Data = data;
-
-        protected CarRentalDbContext Data { get; }
-
-        protected IQueryable<TEntity> All() => this.Data.Set<TEntity>();
-
-        public async Task Save(TEntity entity, CancellationToken cancellationToken = default)
-        {
-            this.Data.Update(entity);
-            await this.Data.SaveChangesAsync(cancellationToken);
-        }
+        this.Data.Update(entity);
+        await this.Data.SaveChangesAsync(cancellationToken);
     }
 }

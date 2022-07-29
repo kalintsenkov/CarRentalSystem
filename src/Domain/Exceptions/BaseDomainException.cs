@@ -1,15 +1,14 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
+﻿namespace CarRentalSystem.Domain.Exceptions;
+
+using System;
+
+public abstract class BaseDomainException : Exception
 {
-    using System;
+    private string? error;
 
-    public abstract class BaseDomainException : Exception
+    public string Error
     {
-        private string? message;
-
-        public new string Message
-        {
-            get => this.message ?? base.Message;
-            set => this.message = value;
-        }
+        get => this.error ?? base.Message;
+        set => this.error = value;
     }
 }

@@ -1,106 +1,80 @@
-﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.Create
-{
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Contracts;
-    using Dealers;
-    using Domain.Common;
-    using Domain.Factories.CarAds;
-    using Domain.Models.CarAds;
-    using MediatR;
+﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.Create;
 
-    public class CreateCarAdCommand : IRequest<CreateCarAdOutputModel>
+using System.Threading;
+using System.Threading.Tasks;
+using Common;
+using Contracts;
+using Dealers;
+using Domain.Common;
+using Domain.Factories.CarAds;
+using Domain.Models.CarAds;
+using Exceptions;
+using MediatR;
+
+public class CreateCarAdCommand : CarAdCommand<CreateCarAdCommand>, IRequest<CreateCarAdOutputModel>
+{
+    public class CreateCarAdCommandHandler : IRequestHandler<CreateCarAdCommand, CreateCarAdOutputModel>
     {
-        public CreateCarAdCommand(
-            string manufacturer,
-            string model,
-            int category,
-            string imageUrl,
-            decimal pricePerDay,
-            bool climateControl,
-            int numberOfSeats,
-            int transmissionType)
+        private readonly ICurrentUser currentUser;
+        private readonly IDealerRepository dealerRepository;
+        private readonly ICarAdRepository carAdRepository;
+        private readonly ICarAdFactory carAdFactory;
+
+        public CreateCarAdCommandHandler(
+            ICurrentUser currentUser,
+            IDealerRepository dealerRepository,
+            ICarAdRepository carAdRepository,
+            ICarAdFactory carAdFactory)
         {
-            this.Manufacturer = manufacturer;
-            this.Model = model;
-            this.Category = category;
-            this.ImageUrl = imageUrl;
-            this.PricePerDay = pricePerDay;
-            this.ClimateControl = climateControl;
-            this.NumberOfSeats = numberOfSeats;
-            this.TransmissionType = transmissionType;
+            this.currentUser = currentUser;
+            this.dealerRepository = dealerRepository;
+            this.carAdRepository = carAdRepository;
+            this.carAdFactory = carAdFactory;
         }
 
-        public string Manufacturer { get; }
-
-        public string Model { get; }
-
-        public int Category { get; }
-
-        public string ImageUrl { get; }
-
-        public decimal PricePerDay { get; }
-
-        public bool ClimateControl { get; }
-
-        public int NumberOfSeats { get; }
-
-        public int TransmissionType { get; }
-
-        public class CreateCarAdCommandHandler : IRequestHandler<CreateCarAdCommand, CreateCarAdOutputModel>
+        public async Task<CreateCarAdOutputModel> Handle(
+            CreateCarAdCommand request,
+            CancellationToken cancellationToken)
         {
-            private readonly ICurrentUser currentUser;
-            private readonly IDealerRepository dealerRepository;
-            private readonly ICarAdRepository carAdRepository;
-            private readonly ICarAdFactory carAdFactory;
+            var dealer = await this.dealerRepository.FindByUser(
+                this.currentUser.UserId,
+                cancellationToken);
 
-            public CreateCarAdCommandHandler(
-                ICurrentUser currentUser, 
-                IDealerRepository dealerRepository,
-                ICarAdRepository carAdRepository, 
-                ICarAdFactory carAdFactory)
+            var category = await this.carAdRepository.GetCategory(
+                request.Category,
+                cancellationToken);
+
+            if (category is null)
             {
-                this.currentUser = currentUser;
-                this.dealerRepository = dealerRepository;
-                this.carAdRepository = carAdRepository;
-                this.carAdFactory = carAdFactory;
+                throw new NotFoundException(
+                    nameof(category),
+                    request.Category);
             }
 
-            public async Task<CreateCarAdOutputModel> Handle(
-                CreateCarAdCommand request, 
-                CancellationToken cancellationToken)
-            {
-                var userId = this.currentUser.UserId;
-                var dealer = await this.dealerRepository
-                    .FindByUser(userId, cancellationToken);
+            var manufacturer = await this.carAdRepository.GetManufacturer(
+                request.Manufacturer,
+                cancellationToken);
 
-                var category = await this.carAdRepository
-                    .GetCategory(request.Category, cancellationToken);
+            var factory = manufacturer is null
+                ? this.carAdFactory.WithManufacturer(request.Manufacturer)
+                : this.carAdFactory.WithManufacturer(manufacturer);
 
-                var manufacturer = await this.carAdRepository
-                    .GetManufacturer(request.Manufacturer, cancellationToken);
+            var carAd = factory
+                .WithModel(request.Model)
+                .WithCategory(category)
+                .WithImageUrl(request.ImageUrl)
+                .WithPricePerDay(request.PricePerDay)
+                .WithOptions(
+                    request.HasClimateControl,
+                    request.NumberOfSeats,
+                    Enumeration.FromValue<TransmissionType>(request.TransmissionType))
+                .Build();
 
-                var factory = manufacturer == null
-                    ? this.carAdFactory.WithManufacturer(request.Manufacturer)
-                    : this.carAdFactory.WithManufacturer(manufacturer);
+            dealer.AddCarAd(carAd);
 
-                var carAd = factory
-                    .WithModel(request.Model)
-                    .WithCategory(category)
-                    .WithImageUrl(request.ImageUrl)
-                    .WithPricePerDay(request.PricePerDay)
-                    .WithOptions(
-                        request.ClimateControl,
-                        request.NumberOfSeats,
-                        Enumeration.FromValue<TransmissionType>(request.TransmissionType))
-                    .Build();
+            await this.carAdRepository.Save(carAd, cancellationToken);
 
-                dealer.AddCarAd(carAd);
-
-                await this.carAdRepository.Save(carAd, cancellationToken);
-
-                return new CreateCarAdOutputModel(carAd.Id);
-            }
+            return new CreateCarAdOutputModel(carAd.Id);
         }
     }
 }

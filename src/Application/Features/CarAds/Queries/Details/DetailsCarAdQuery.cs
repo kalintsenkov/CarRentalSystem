@@ -1,48 +1,48 @@
-﻿namespace CarRentalSystem.Application.Features.CarAds.Queries.Details
+﻿namespace CarRentalSystem.Application.Features.CarAds.Queries.Details;
+
+using System.Threading;
+using System.Threading.Tasks;
+using Dealers;
+using Exceptions;
+using MediatR;
+
+public class DetailsCarAdQuery : IRequest<DetailsCarAdOutputModel>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Dealers;
-    using Domain.Models.CarAds;
-    using Exceptions;
-    using MediatR;
+    public int Id { get; init; }
 
-    public class DetailsCarAdQuery : IRequest<DetailsCarAdOutputModel>
+    public class DetailsCarAdQueryHandler : IRequestHandler<DetailsCarAdQuery, DetailsCarAdOutputModel>
     {
-        public int Id { get; set; }
+        private readonly ICarAdRepository carAdRepository;
+        private readonly IDealerRepository dealerRepository;
 
-        public class DetailsCarAdQueryHandler : IRequestHandler<DetailsCarAdQuery, DetailsCarAdOutputModel>
+        public DetailsCarAdQueryHandler(
+            ICarAdRepository carAdRepository,
+            IDealerRepository dealerRepository)
         {
-            private readonly ICarAdRepository carAdRepository;
-            private readonly IDealerRepository dealerRepository;
+            this.carAdRepository = carAdRepository;
+            this.dealerRepository = dealerRepository;
+        }
 
-            public DetailsCarAdQueryHandler(
-                ICarAdRepository carAdRepository, 
-                IDealerRepository dealerRepository)
+        public async Task<DetailsCarAdOutputModel> Handle(
+            DetailsCarAdQuery request,
+            CancellationToken cancellationToken)
+        {
+            var carAd = await this.carAdRepository.GetDetails(
+                request.Id,
+                cancellationToken);
+
+            if (carAd == null)
             {
-                this.carAdRepository = carAdRepository;
-                this.dealerRepository = dealerRepository;
+                throw new NotFoundException(
+                    nameof(carAd),
+                    request.Id);
             }
 
-            public async Task<DetailsCarAdOutputModel> Handle(
-                DetailsCarAdQuery request,
-                CancellationToken cancellationToken)
-            {
-                var carAd = await this.carAdRepository.GetDetails(
-                    request.Id, 
-                    cancellationToken);
+            carAd.Dealer = await this.dealerRepository.GetDetailsByCarId(
+                request.Id,
+                cancellationToken);
 
-                if (carAd == null)
-                {
-                    throw new NotFoundException(nameof(CarAd), request.Id);
-                }
-
-                carAd.Dealer = await this.dealerRepository.GetDetailsByCarId(
-                    request.Id,
-                    cancellationToken);
-
-                return carAd;
-            }
+            return carAd;
         }
     }
 }

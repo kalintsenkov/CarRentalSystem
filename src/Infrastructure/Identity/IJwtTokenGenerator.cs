@@ -1,7 +1,6 @@
-﻿namespace CarRentalSystem.Infrastructure.Identity
+﻿namespace CarRentalSystem.Infrastructure.Identity;
+
+public interface IJwtTokenGenerator
 {
-    public interface IJwtTokenGenerator
-    {
-        string GenerateToken(User user);
-    }
+    string GenerateToken(User user);
 }

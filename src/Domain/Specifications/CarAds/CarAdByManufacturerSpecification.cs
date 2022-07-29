@@ -1,20 +1,19 @@
-﻿namespace CarRentalSystem.Domain.Specifications.CarAds
+﻿namespace CarRentalSystem.Domain.Specifications.CarAds;
+
+using System;
+using System.Linq.Expressions;
+using Models.CarAds;
+
+public class CarAdByManufacturerSpecification : Specification<CarAd>
 {
-    using System;
-    using System.Linq.Expressions;
-    using Models.CarAds;
+    private readonly string? manufacturer;
 
-    public class CarAdByManufacturerSpecification : Specification<CarAd>
-    {
-        private readonly string? manufacturer;
+    public CarAdByManufacturerSpecification(string? manufacturer)
+        => this.manufacturer = manufacturer;
 
-        public CarAdByManufacturerSpecification(string? manufacturer)
-            => this.manufacturer = manufacturer;
+    protected override bool Include => this.manufacturer != null;
 
-        protected override bool Include => this.manufacturer != null;
-
-        public override Expression<Func<CarAd, bool>> ToExpression()
-            => carAd => carAd.Manufacturer.Name.ToLower()
-                .Contains(this.manufacturer!.ToLower());
-    }
+    public override Expression<Func<CarAd, bool>> ToExpression()
+        => carAd => carAd.Manufacturer.Name.ToLower()
+            .Contains(this.manufacturer!.ToLower());
 }

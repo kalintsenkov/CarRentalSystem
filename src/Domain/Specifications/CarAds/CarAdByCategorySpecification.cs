@@ -1,19 +1,18 @@
-﻿namespace CarRentalSystem.Domain.Specifications.CarAds
+﻿namespace CarRentalSystem.Domain.Specifications.CarAds;
+
+using System;
+using System.Linq.Expressions;
+using Models.CarAds;
+
+public class CarAdByCategorySpecification : Specification<CarAd>
 {
-    using System;
-    using System.Linq.Expressions;
-    using Models.CarAds;
+    private readonly int? category;
 
-    public class CarAdByCategorySpecification : Specification<CarAd>
-    {
-        private readonly int? category;
+    public CarAdByCategorySpecification(int? category)
+        => this.category = category;
 
-        public CarAdByCategorySpecification(int? category)
-            => this.category = category;
+    protected override bool Include => this.category != null;
 
-        protected override bool Include => this.category != null;
-
-        public override Expression<Func<CarAd, bool>> ToExpression()
-            => carAd => carAd.Category.Id == this.category;
-    }
+    public override Expression<Func<CarAd, bool>> ToExpression()
+        => carAd => carAd.Category.Id == this.category;
 }

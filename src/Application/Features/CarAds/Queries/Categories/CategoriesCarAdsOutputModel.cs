@@ -1,16 +1,15 @@
-﻿namespace CarRentalSystem.Application.Features.CarAds.Queries.Categories
+﻿namespace CarRentalSystem.Application.Features.CarAds.Queries.Categories;
+
+using Domain.Models.CarAds;
+using Mapping;
+
+public class CategoriesCarAdsOutputModel : IMapFrom<Category>
 {
-    using Domain.Models.CarAds;
-    using Mapping;
+    public int Id { get; private set; }
 
-    public class CategoriesCarAdsOutputModel : IMapFrom<Category>
-    {
-        public int Id { get; private set; }
+    public string Name { get; private set; } = default!;
 
-        public string Name { get; private set; } = default!;
+    public string Description { get; private set; } = default!;
 
-        public string Description { get; private set; } = default!;
-
-        public int TotalCarAds { get; set; }
-    }
+    public int TotalCarAds { get; set; }
 }

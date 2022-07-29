@@ -1,31 +1,30 @@
-﻿namespace CarRentalSystem.Infrastructure.Identity
+﻿namespace CarRentalSystem.Infrastructure.Identity;
+
+using FakeItEasy;
+using Microsoft.AspNetCore.Identity;
+
+public class IdentityFakes
 {
-    using FakeItEasy;
-    using Microsoft.AspNetCore.Identity;
+    public const string TestEmail = "test@test.com";
+    public const string ValidPassword = "TestPass";
+    public const string ValidName = "TestName";
+    public const string ValidPhoneNumber = "+1234567890";
 
-    public class IdentityFakes
+    public static UserManager<User> FakeUserManager
     {
-        public const string TestEmail = "test@test.com";
-        public const string ValidPassword = "TestPass";
-        public const string ValidName = "TestName";
-        public const string ValidPhoneNumber = "+1234567890";
-
-        public static UserManager<User> FakeUserManager
+        get
         {
-            get
-            {
-                var userManager = A.Fake<UserManager<User>>();
+            var userManager = A.Fake<UserManager<User>>();
 
-                A
-                    .CallTo(() => userManager.FindByEmailAsync(TestEmail))
-                    .Returns(new User(TestEmail) { Id = "test" });
+            A
+                .CallTo(() => userManager.FindByEmailAsync(TestEmail))
+                .Returns(new User(TestEmail) { Id = "test" });
 
-                A
-                    .CallTo(() => userManager.CheckPasswordAsync(A<User>.That.Matches(u => u.Email == TestEmail), ValidPassword))
-                    .Returns(true);
+            A
+                .CallTo(() => userManager.CheckPasswordAsync(A<User>.That.Matches(u => u.Email == TestEmail), ValidPassword))
+                .Returns(true);
 
-                return userManager;
-            }
+            return userManager;
         }
     }
 }

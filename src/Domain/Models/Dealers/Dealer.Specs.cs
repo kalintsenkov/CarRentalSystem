@@ -1,24 +1,23 @@
-﻿namespace CarRentalSystem.Domain.Models.Dealers
+﻿namespace CarRentalSystem.Domain.Models.Dealers;
+
+using CarAds;
+using FakeItEasy;
+using FluentAssertions;
+using Xunit;
+
+public class DealerSpecs
 {
-    using CarAds;
-    using FakeItEasy;
-    using FluentAssertions;
-    using Xunit;
-
-    public class DealerSpecs
+    [Fact]
+    public void AddCarAdShouldSaveCarAd()
     {
-        [Fact]
-        public void AddCarAdShouldSaveCarAd()
-        {
-            // Arrange
-            var dealer = new Dealer("Valid dealer", "+12345678");
-            var carAd = A.Dummy<CarAd>();
+        // Arrange
+        var dealer = new Dealer("Valid dealer", "+12345678");
+        var carAd = A.Dummy<CarAd>();
 
-            // Act
-            dealer.AddCarAd(carAd);
+        // Act
+        dealer.AddCarAd(carAd);
 
-            // Assert
-            dealer.CarAds.Should().Contain(carAd);
-        }
+        // Assert
+        dealer.CarAds.Should().Contain(carAd);
     }
 }

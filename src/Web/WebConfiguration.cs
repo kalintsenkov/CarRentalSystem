@@ -1,30 +1,29 @@
-﻿namespace CarRentalSystem.Web
+﻿namespace CarRentalSystem.Web;
+
+using Application;
+using Application.Contracts;
+using FluentValidation.AspNetCore;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.DependencyInjection;
+using Services;
+
+public static class WebConfiguration
 {
-    using Application;
-    using Application.Contracts;
-    using FluentValidation.AspNetCore;
-    using Microsoft.AspNetCore.Mvc;
-    using Microsoft.Extensions.DependencyInjection;
-    using Services;
-
-    public static class WebConfiguration
+    public static IServiceCollection AddWebComponents(
+        this IServiceCollection services)
     {
-        public static IServiceCollection AddWebComponents(
-            this IServiceCollection services)
+        services
+            .AddScoped<ICurrentUser, CurrentUserService>()
+            .AddControllers()
+            .AddFluentValidation(validation => validation
+                .RegisterValidatorsFromAssemblyContaining<Result>())
+            .AddNewtonsoftJson();
+
+        services.Configure<ApiBehaviorOptions>(options =>
         {
-            services
-                .AddScoped<ICurrentUser, CurrentUserService>()
-                .AddControllers()
-                .AddFluentValidation(validation => validation
-                    .RegisterValidatorsFromAssemblyContaining<Result>())
-                .AddNewtonsoftJson();
+            options.SuppressModelStateInvalidFilter = true;
+        });
 
-            services.Configure<ApiBehaviorOptions>(options =>
-            {
-                options.SuppressModelStateInvalidFilter = true;
-            });
-
-            return services;
-        }
+        return services;
     }
 }

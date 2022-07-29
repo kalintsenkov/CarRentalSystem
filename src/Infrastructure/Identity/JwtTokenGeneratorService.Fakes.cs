@@ -1,23 +1,22 @@
-﻿namespace CarRentalSystem.Infrastructure.Identity
+﻿namespace CarRentalSystem.Infrastructure.Identity;
+
+using FakeItEasy;
+
+public class JwtTokenGeneratorFakes
 {
-    using FakeItEasy;
+    public const string ValidToken = "ValidToken";
 
-    public class JwtTokenGeneratorFakes
+    public static IJwtTokenGenerator FakeJwtTokenGenerator
     {
-        public const string ValidToken = "ValidToken";
-
-        public static IJwtTokenGenerator FakeJwtTokenGenerator
+        get
         {
-            get
-            {
-                var jwtTokenGenerator = A.Fake<IJwtTokenGenerator>();
+            var jwtTokenGenerator = A.Fake<IJwtTokenGenerator>();
 
-                A
-                    .CallTo(() => jwtTokenGenerator.GenerateToken(A<User>.Ignored))
-                    .Returns(ValidToken);
+            A
+                .CallTo(() => jwtTokenGenerator.GenerateToken(A<User>.Ignored))
+                .Returns(ValidToken);
 
-                return jwtTokenGenerator;
-            }
+            return jwtTokenGenerator;
         }
     }
 }

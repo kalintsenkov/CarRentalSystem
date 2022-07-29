@@ -1,7 +1,6 @@
-﻿namespace CarRentalSystem.Infrastructure
+﻿namespace CarRentalSystem.Infrastructure;
+
+public interface IInitializer
 {
-    public interface IInitializer
-    {
-        void Initialize();
-    }
+    void Initialize();
 }

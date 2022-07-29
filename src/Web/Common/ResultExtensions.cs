@@ -1,45 +1,44 @@
-﻿namespace CarRentalSystem.Web.Common
+﻿namespace CarRentalSystem.Web.Common;
+
+using System.Threading.Tasks;
+using Application;
+using Microsoft.AspNetCore.Mvc;
+
+public static class ResultExtensions
 {
-    using System.Threading.Tasks;
-    using Application;
-    using Microsoft.AspNetCore.Mvc;
-
-    public static class ResultExtensions
+    public static async Task<ActionResult<TData>> ToActionResult<TData>(this Task<TData> resultTask)
     {
-        public static async Task<ActionResult<TData>> ToActionResult<TData>(this Task<TData> resultTask)
+        var result = await resultTask;
+
+        if (result == null)
         {
-            var result = await resultTask;
-
-            if (result == null)
-            {
-                return new NotFoundResult();
-            }
-
-            return result;
+            return new NotFoundResult();
         }
 
-        public static async Task<ActionResult> ToActionResult(this Task<Result> resultTask)
-        {
-            var result = await resultTask;
+        return result;
+    }
 
-            if (!result.Succeeded)
-            {
-                return new BadRequestObjectResult(result.Errors);
-            }
+    public static async Task<ActionResult> ToActionResult(this Task<Result> resultTask)
+    {
+        var result = await resultTask;
+
+        if (!result.Succeeded)
+        {
+            return new BadRequestObjectResult(result.Errors);
+        }
             
-            return new OkResult();
-        }
+        return new OkResult();
+    }
 
-        public static async Task<ActionResult<TData>> ToActionResult<TData>(this Task<Result<TData>> resultTask)
+    public static async Task<ActionResult<TData>> ToActionResult<TData>(this Task<Result<TData>> resultTask)
+    {
+        var result = await resultTask;
+
+        if (!result.Succeeded)
         {
-            var result = await resultTask;
-
-            if (!result.Succeeded)
-            {
-                return new BadRequestObjectResult(result.Errors);
-            }
-
-            return result.Data!;
+            return new BadRequestObjectResult(result.Errors);
         }
+
+        return result.Data!;
     }
 }

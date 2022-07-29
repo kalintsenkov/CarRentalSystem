@@ -1,10 +1,9 @@
-﻿namespace CarRentalSystem.Domain.Factories
-{
-    using Common;
+﻿namespace CarRentalSystem.Domain.Factories;
 
-    public interface IFactory<out TEntity>
-        where TEntity : IAggregateRoot
-    {
-        TEntity Build();
-    }
+using Common;
+
+public interface IFactory<out TEntity>
+    where TEntity : IAggregateRoot
+{
+    TEntity Build();
 }

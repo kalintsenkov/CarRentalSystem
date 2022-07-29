@@ -1,6 +1,5 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
+﻿namespace CarRentalSystem.Domain.Exceptions;
+
+public class InvalidManufacturerException : BaseDomainException
 {
-    public class InvalidManufacturerException : BaseDomainException
-    {
-    }
 }

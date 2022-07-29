@@ -1,9 +1,8 @@
-﻿namespace CarRentalSystem.Application
-{
-    public class ApplicationSettings
-    {
-        public ApplicationSettings() => this.Secret = default!;
+﻿namespace CarRentalSystem.Application;
 
-        public string Secret { get; set; }
-    }
+public class ApplicationSettings
+{
+    public ApplicationSettings() => this.Secret = default!;
+
+    public string Secret { get; set; }
 }

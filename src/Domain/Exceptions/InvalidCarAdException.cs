@@ -1,11 +1,10 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
-{
-    public class InvalidCarAdException : BaseDomainException
-    {
-        public InvalidCarAdException()
-        {
-        }
+﻿namespace CarRentalSystem.Domain.Exceptions;
 
-        public InvalidCarAdException(string message) => this.Message = message;
+public class InvalidCarAdException : BaseDomainException
+{
+    public InvalidCarAdException()
+    {
     }
+
+    public InvalidCarAdException(string error) => this.Error = error;
 }

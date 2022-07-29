@@ -1,6 +1,5 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
+﻿namespace CarRentalSystem.Domain.Exceptions;
+
+public class InvalidOptionsException : BaseDomainException
 {
-    public class InvalidOptionsException : BaseDomainException
-    {
-    }
 }

@@ -1,11 +1,10 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
-{
-    public class InvalidPhoneNumberException : BaseDomainException
-    {
-        public InvalidPhoneNumberException()
-        {
-        }
+﻿namespace CarRentalSystem.Domain.Exceptions;
 
-        public InvalidPhoneNumberException(string message) => this.Message = message;
+public class InvalidPhoneNumberException : BaseDomainException
+{
+    public InvalidPhoneNumberException()
+    {
     }
+
+    public InvalidPhoneNumberException(string error) => this.Error = error;
 }

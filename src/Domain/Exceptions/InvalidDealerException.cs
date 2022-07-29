@@ -1,11 +1,10 @@
-﻿namespace CarRentalSystem.Domain.Exceptions
-{
-    public class InvalidDealerException : BaseDomainException
-    {
-        public InvalidDealerException()
-        {
-        }
+﻿namespace CarRentalSystem.Domain.Exceptions;
 
-        public InvalidDealerException(string message) => this.Message = message;
+public class InvalidDealerException : BaseDomainException
+{
+    public InvalidDealerException()
+    {
     }
+
+    public InvalidDealerException(string error) => this.Error = error;
 }

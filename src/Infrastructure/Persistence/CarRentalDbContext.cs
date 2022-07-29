@@ -1,32 +1,31 @@
-﻿namespace CarRentalSystem.Infrastructure.Persistence
+﻿namespace CarRentalSystem.Infrastructure.Persistence;
+
+using System.Reflection;
+using Domain.Models.CarAds;
+using Domain.Models.Dealers;
+using Identity;
+using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore;
+
+internal class CarRentalDbContext : IdentityDbContext<User>
 {
-    using System.Reflection;
-    using Domain.Models.CarAds;
-    using Domain.Models.Dealers;
-    using Identity;
-    using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore;
-
-    internal class CarRentalDbContext : IdentityDbContext<User>
+    public CarRentalDbContext(DbContextOptions<CarRentalDbContext> options)
+        : base(options)
     {
-        public CarRentalDbContext(DbContextOptions<CarRentalDbContext> options)
-            : base(options)
-        {
-        }
+    }
 
-        public DbSet<CarAd> CarAds { get; set; } = default!;
+    public DbSet<CarAd> CarAds { get; set; } = default!;
 
-        public DbSet<Category> Categories { get; set; } = default!;
+    public DbSet<Category> Categories { get; set; } = default!;
 
-        public DbSet<Manufacturer> Manufacturers { get; set; } = default!;
+    public DbSet<Manufacturer> Manufacturers { get; set; } = default!;
 
-        public DbSet<Dealer> Dealers { get; set; } = default!;
+    public DbSet<Dealer> Dealers { get; set; } = default!;
 
-        protected override void OnModelCreating(ModelBuilder builder)
-        {
-            builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
+    protected override void OnModelCreating(ModelBuilder builder)
+    {
+        builder.ApplyConfigurationsFromAssembly(Assembly.GetExecutingAssembly());
 
-            base.OnModelCreating(builder);
-        }
+        base.OnModelCreating(builder);
     }
 }

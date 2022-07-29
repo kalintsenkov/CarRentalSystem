@@ -1,6 +1,5 @@
-﻿namespace CarRentalSystem.Domain.Common
+﻿namespace CarRentalSystem.Domain.Common;
+
+public interface IAggregateRoot
 {
-    public interface IAggregateRoot
-    {
-    }
 }

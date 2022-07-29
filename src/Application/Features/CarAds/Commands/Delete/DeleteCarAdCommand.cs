@@ -1,51 +1,47 @@
-﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.Delete
+﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.Delete;
+
+using System.Threading;
+using System.Threading.Tasks;
+using Common;
+using Contracts;
+using Dealers;
+using MediatR;
+
+public class DeleteCarAdCommand : EntityCommand<int>, IRequest<Result>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using CarRentalSystem.Application.Contracts;
-    using CarRentalSystem.Application.Features.Dealers;
-    using MediatR;
-
-    public class DeleteCarAdCommand : IRequest<Result>
+    public class DeleteCarAdCommandHandler : IRequestHandler<DeleteCarAdCommand, Result>
     {
-        public int Id { get; set; }
+        private readonly ICurrentUser currentUser;
+        private readonly ICarAdRepository carAdRepository;
+        private readonly IDealerRepository dealerRepository;
 
-        public class DeleteCarAdCommandHandler : IRequestHandler<DeleteCarAdCommand, Result>
+        public DeleteCarAdCommandHandler(
+            ICurrentUser currentUser,
+            ICarAdRepository carAdRepository,
+            IDealerRepository dealerRepository)
         {
-            private readonly ICurrentUser currentUser;
-            private readonly ICarAdRepository carAdRepository;
-            private readonly IDealerRepository dealerRepository;
+            this.currentUser = currentUser;
+            this.carAdRepository = carAdRepository;
+            this.dealerRepository = dealerRepository;
+        }
 
-            public DeleteCarAdCommandHandler(
-                ICurrentUser currentUser,
-                ICarAdRepository carAdRepository,
-                IDealerRepository dealerRepository)
-            {
-                this.currentUser = currentUser;
-                this.carAdRepository = carAdRepository;
-                this.dealerRepository = dealerRepository;
-            }
-
-            public async Task<Result> Handle(
-                DeleteCarAdCommand request, 
-                CancellationToken cancellationToken)
-            {
-                var dealerId = await dealerRepository.GetDealerId(
-                currentUser.UserId,
+        public async Task<Result> Handle(
+            DeleteCarAdCommand request,
+            CancellationToken cancellationToken)
+        {
+            var dealerHasCar = await this.currentUser.DealerHasCarAd(
+                this.dealerRepository,
+                request.Id,
                 cancellationToken);
 
-                var dealerHasCar = await dealerRepository.HasCarAd(
-                    dealerId,
-                    request.Id,
-                    cancellationToken);
-
-                if (!dealerHasCar)
-                {
-                    return "You cannot edit this car ad.";
-                }
-
-                return await this.carAdRepository.Delete(request.Id, cancellationToken);
+            if (!dealerHasCar)
+            {
+                return dealerHasCar;
             }
+
+            return await this.carAdRepository.Delete(
+                request.Id,
+                cancellationToken);
         }
     }
 }

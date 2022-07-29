@@ -1,38 +1,37 @@
-﻿namespace CarRentalSystem.Infrastructure.Persistence.Configurations
+﻿namespace CarRentalSystem.Infrastructure.Persistence.Configurations;
+
+using Domain.Models.Dealers;
+using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Metadata.Builders;
+
+using static Domain.Models.ModelConstants.Common;
+
+internal class DealerConfiguration : IEntityTypeConfiguration<Dealer>
 {
-    using Domain.Models.Dealers;
-    using Microsoft.EntityFrameworkCore;
-    using Microsoft.EntityFrameworkCore.Metadata.Builders;
-
-    using static Domain.Models.ModelConstants.Common;
-
-    internal class DealerConfiguration : IEntityTypeConfiguration<Dealer>
+    public void Configure(EntityTypeBuilder<Dealer> builder)
     {
-        public void Configure(EntityTypeBuilder<Dealer> builder)
-        {
-            builder
-                .HasKey(d => d.Id);
+        builder
+            .HasKey(d => d.Id);
 
-            builder
-                .Property(d => d.Name)
-                .IsRequired()
-                .HasMaxLength(MaxNameLength);
+        builder
+            .Property(d => d.Name)
+            .IsRequired()
+            .HasMaxLength(MaxNameLength);
 
-            builder
-                .OwnsOne(
-                    d => d.PhoneNumber,
-                    p =>
-                    {
-                        p.WithOwner();
-                        p.Property(pn => pn.Number);
-                    });
+        builder
+            .OwnsOne(
+                d => d.PhoneNumber,
+                p =>
+                {
+                    p.WithOwner();
+                    p.Property(pn => pn.Number).IsRequired();
+                });
 
-            builder
-                .HasMany(pr => pr.CarAds)
-                .WithOne()
-                .Metadata
-                .PrincipalToDependent
-                .SetField("carAds");
-        }
+        builder
+            .HasMany(pr => pr.CarAds)
+            .WithOne()
+            .Metadata
+            .PrincipalToDependent!
+            .SetField("carAds");
     }
 }

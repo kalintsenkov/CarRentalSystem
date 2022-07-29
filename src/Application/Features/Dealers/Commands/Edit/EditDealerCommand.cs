@@ -1,52 +1,49 @@
-﻿namespace CarRentalSystem.Application.Features.Dealers.Commands.Edit
+﻿namespace CarRentalSystem.Application.Features.Dealers.Commands.Edit;
+
+using System.Threading;
+using System.Threading.Tasks;
+using Contracts;
+using MediatR;
+
+public class EditDealerCommand : EntityCommand<int>, IRequest<Result>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Contracts;
-    using MediatR;
+    public string Name { get; init; } = default!;
 
-    public class EditDealerCommand : IRequest<Result>
+    public string PhoneNumber { get; init; } = default!;
+
+    public class EditDealerCommandHandler : IRequestHandler<EditDealerCommand, Result>
     {
-        public int Id { get; set; }
+        private readonly ICurrentUser currentUser;
+        private readonly IDealerRepository dealerRepository;
 
-        public string Name { get; set; } = default!;
-
-        public string PhoneNumber { get; set; } = default!;
-
-        public class EditDealerCommandHandler : IRequestHandler<EditDealerCommand, Result>
+        public EditDealerCommandHandler(
+            ICurrentUser currentUser, 
+            IDealerRepository dealerRepository)
         {
-            private readonly ICurrentUser currentUser;
-            private readonly IDealerRepository dealerRepository;
+            this.currentUser = currentUser;
+            this.dealerRepository = dealerRepository;
+        }
 
-            public EditDealerCommandHandler(
-                ICurrentUser currentUser, 
-                IDealerRepository dealerRepository)
+        public async Task<Result> Handle(
+            EditDealerCommand request, 
+            CancellationToken cancellationToken)
+        {
+            var dealer = await this.dealerRepository.FindByUser(
+                this.currentUser.UserId,
+                cancellationToken);
+
+            if (request.Id != dealer.Id)
             {
-                this.currentUser = currentUser;
-                this.dealerRepository = dealerRepository;
+                return "You cannot edit this dealer.";
             }
 
-            public async Task<Result> Handle(
-                EditDealerCommand request, 
-                CancellationToken cancellationToken)
-            {
-                var dealer = await this.dealerRepository.FindByUser(
-                    this.currentUser.UserId,
-                    cancellationToken);
+            dealer
+                .EditName(request.Name)
+                .EditPhoneNumber(request.PhoneNumber);
 
-                if (request.Id != dealer.Id)
-                {
-                    return "You cannot edit this dealer.";
-                }
+            await this.dealerRepository.Save(dealer, cancellationToken);
 
-                dealer
-                    .EditName(request.Name)
-                    .EditPhoneNumber(request.PhoneNumber);
-
-                await this.dealerRepository.Save(dealer, cancellationToken);
-
-                return Result.Success;
-            }
+            return Result.Success;
         }
     }
 }

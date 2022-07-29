@@ -1,59 +1,61 @@
-﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.ChangeAvailability
+﻿namespace CarRentalSystem.Application.Features.CarAds.Commands.ChangeAvailability;
+
+using System.Threading;
+using System.Threading.Tasks;
+using Common;
+using Contracts;
+using Dealers;
+using Exceptions;
+using MediatR;
+
+public class ChangeAvailabilityCarAdCommand : EntityCommand<int>, IRequest<Result>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Contracts;
-    using Dealers;
-    using MediatR;
-
-    public class ChangeAvailabilityCarAdCommand : IRequest<Result>
+    public class ChangeAvailabilityCarAdCommandHandler : IRequestHandler<ChangeAvailabilityCarAdCommand, Result>
     {
-        public int Id { get; set; }
+        private readonly ICurrentUser currentUser;
+        private readonly ICarAdRepository carAdRepository;
+        private readonly IDealerRepository dealerRepository;
 
-        public class ChangeAvailabilityCarAdCommandHandler : IRequestHandler<ChangeAvailabilityCarAdCommand, Result>
+        public ChangeAvailabilityCarAdCommandHandler(
+            ICurrentUser currentUser,
+            ICarAdRepository carAdRepository,
+            IDealerRepository dealerRepository)
         {
-            private readonly ICurrentUser currentUser;
-            private readonly ICarAdRepository carAdRepository;
-            private readonly IDealerRepository dealerRepository;
+            this.currentUser = currentUser;
+            this.carAdRepository = carAdRepository;
+            this.dealerRepository = dealerRepository;
+        }
 
-            public ChangeAvailabilityCarAdCommandHandler(
-                ICurrentUser currentUser,
-                ICarAdRepository carAdRepository, 
-                IDealerRepository dealerRepository)
+        public async Task<Result> Handle(
+            ChangeAvailabilityCarAdCommand request,
+            CancellationToken cancellationToken)
+        {
+            var dealerHasCar = await this.currentUser.DealerHasCarAd(
+                this.dealerRepository,
+                request.Id,
+                cancellationToken);
+
+            if (!dealerHasCar)
             {
-                this.currentUser = currentUser;
-                this.carAdRepository = carAdRepository;
-                this.dealerRepository = dealerRepository;
+                return dealerHasCar;
             }
 
-            public async Task<Result> Handle(
-                ChangeAvailabilityCarAdCommand request, 
-                CancellationToken cancellationToken)
+            var carAd = await this.carAdRepository.Find(
+                request.Id,
+                cancellationToken);
+
+            if (carAd is null)
             {
-                var dealerId = await this.dealerRepository.GetDealerId(
-                    this.currentUser.UserId,
-                    cancellationToken);
-
-                var hasCarAd = await this.dealerRepository.HasCarAd(
-                    dealerId,
-                    request.Id,
-                    cancellationToken);
-
-                if (!hasCarAd)
-                {
-                    return "You cannot edit this car ad.";
-                }
-
-                var carAd = await this.carAdRepository.Find(
-                    request.Id, 
-                    cancellationToken);
-
-                carAd.ChangeAvailability();
-
-                await this.carAdRepository.Save(carAd, cancellationToken);
-
-                return Result.Success;
+                throw new NotFoundException(
+                    nameof(carAd),
+                    request.Id);
             }
+
+            carAd.ChangeAvailability();
+
+            await this.carAdRepository.Save(carAd, cancellationToken);
+
+            return Result.Success;
         }
     }
 }

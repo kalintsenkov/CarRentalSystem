@@ -1,24 +1,23 @@
-﻿namespace CarRentalSystem.Domain.Factories.CarAds
+﻿namespace CarRentalSystem.Domain.Factories.CarAds;
+
+using Models.CarAds;
+
+public interface ICarAdFactory : IFactory<CarAd>
 {
-    using Models.CarAds;
+    ICarAdFactory WithManufacturer(string name);
 
-    public interface ICarAdFactory : IFactory<CarAd>
-    {
-        ICarAdFactory WithManufacturer(string name);
+    ICarAdFactory WithManufacturer(Manufacturer manufacturer);
 
-        ICarAdFactory WithManufacturer(Manufacturer manufacturer);
+    ICarAdFactory WithModel(string model);
 
-        ICarAdFactory WithModel(string model);
+    ICarAdFactory WithCategory(Category category);
 
-        ICarAdFactory WithCategory(Category category);
+    ICarAdFactory WithImageUrl(string imageUrl);
 
-        ICarAdFactory WithImageUrl(string imageUrl);
+    ICarAdFactory WithPricePerDay(decimal pricePerDay);
 
-        ICarAdFactory WithPricePerDay(decimal pricePerDay);
-
-        ICarAdFactory WithOptions(
-            bool hasClimateControl, 
-            int numberOfSeats, 
-            TransmissionType transmissionType);
-    }
+    ICarAdFactory WithOptions(
+        bool hasClimateControl, 
+        int numberOfSeats, 
+        TransmissionType transmissionType);
 }

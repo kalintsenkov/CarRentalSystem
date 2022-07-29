@@ -1,9 +1,8 @@
-﻿namespace CarRentalSystem.Application.Features.Identity
-{
-    using Domain.Models.Dealers;
+﻿namespace CarRentalSystem.Application.Features.Identity;
 
-    public interface IUser
-    {
-        void BecomeDealer(Dealer dealer);
-    }
+using Domain.Models.Dealers;
+
+public interface IUser
+{
+    void BecomeDealer(Dealer dealer);
 }

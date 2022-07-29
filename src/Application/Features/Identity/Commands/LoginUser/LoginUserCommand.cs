@@ -1,46 +1,48 @@
-﻿namespace CarRentalSystem.Application.Features.Identity.Commands.LoginUser
-{
-    using System.Threading;
-    using System.Threading.Tasks;
-    using Dealers;
-    using MediatR;
+﻿namespace CarRentalSystem.Application.Features.Identity.Commands.LoginUser;
 
-    public class LoginUserCommand : UserInputModel, IRequest<Result<LoginOutputModel>>
+using System.Threading;
+using System.Threading.Tasks;
+using Dealers;
+using MediatR;
+
+public class LoginUserCommand : UserInputModel, IRequest<Result<LoginOutputModel>>
+{
+    public LoginUserCommand(string email, string password)
+        : base(email, password)
     {
-        public LoginUserCommand(string email, string password)
-            : base(email, password)
+    }
+
+    public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginOutputModel>>
+    {
+        private readonly IIdentity identity;
+        private readonly IDealerRepository dealerRepository;
+
+        public LoginUserCommandHandler(
+            IIdentity identity, 
+            IDealerRepository dealerRepository)
         {
+            this.identity = identity;
+            this.dealerRepository = dealerRepository;
         }
 
-        public class LoginUserCommandHandler : IRequestHandler<LoginUserCommand, Result<LoginOutputModel>>
+        public async Task<Result<LoginOutputModel>> Handle(
+            LoginUserCommand request,
+            CancellationToken cancellationToken)
         {
-            private readonly IIdentity identity;
-            private readonly IDealerRepository dealerRepository;
+            var result = await this.identity.Login(request);
 
-            public LoginUserCommandHandler(
-                IIdentity identity, 
-                IDealerRepository dealerRepository)
+            if (!result.Succeeded)
             {
-                this.identity = identity;
-                this.dealerRepository = dealerRepository;
+                return result.Errors;
             }
 
-            public async Task<Result<LoginOutputModel>> Handle(
-                LoginUserCommand request,
-                CancellationToken cancellationToken)
-            {
-                var result = await this.identity.Login(request);
-                if (!result.Succeeded)
-                {
-                    return result.Errors;
-                }
+            var user = result.Data;
 
-                var user = result.Data;
+            var dealerId = await this.dealerRepository.GetDealerId(
+                user.UserId, 
+                cancellationToken);
 
-                var dealerId = await this.dealerRepository.GetDealerId(user.UserId, cancellationToken);
-
-                return new LoginOutputModel(dealerId, user.Token);
-            }
+            return new LoginOutputModel(dealerId, user.Token);
         }
     }
 }

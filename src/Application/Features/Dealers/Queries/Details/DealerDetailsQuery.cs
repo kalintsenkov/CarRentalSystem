@@ -1,24 +1,25 @@
-﻿namespace CarRentalSystem.Application.Features.Dealers.Queries.Details
+﻿namespace CarRentalSystem.Application.Features.Dealers.Queries.Details;
+
+using System.Threading;
+using System.Threading.Tasks;
+using MediatR;
+
+public class DealerDetailsQuery : IRequest<DealerDetailsOutputModel?>
 {
-    using System.Threading;
-    using System.Threading.Tasks;
-    using MediatR;
+    public int Id { get; init; }
 
-    public class DealerDetailsQuery : IRequest<DealerDetailsOutputModel>
+    public class DealerDetailsQueryHandler : IRequestHandler<DealerDetailsQuery, DealerDetailsOutputModel?>
     {
-        public int Id { get; set; }
+        private readonly IDealerRepository dealerRepository;
 
-        public class DealerDetailsQueryHandler : IRequestHandler<DealerDetailsQuery, DealerDetailsOutputModel>
-        {
-            private readonly IDealerRepository dealerRepository;
+        public DealerDetailsQueryHandler(IDealerRepository dealerRepository)
+            => this.dealerRepository = dealerRepository;
 
-            public DealerDetailsQueryHandler(IDealerRepository dealerRepository)
-                => this.dealerRepository = dealerRepository;
-
-            public async Task<DealerDetailsOutputModel> Handle(
-                DealerDetailsQuery request,
-                CancellationToken cancellationToken)
-                => await this.dealerRepository.GetDetails(request.Id, cancellationToken);
-        }
+        public async Task<DealerDetailsOutputModel?> Handle(
+            DealerDetailsQuery request,
+            CancellationToken cancellationToken)
+            => await this.dealerRepository.GetDetails(
+                request.Id, 
+                cancellationToken);
     }
 }

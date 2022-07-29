@@ -1,20 +1,19 @@
-﻿namespace CarRentalSystem.Domain.Models.CarAds
+﻿namespace CarRentalSystem.Domain.Models.CarAds;
+
+using Common;
+
+public class TransmissionType : Enumeration
 {
-    using Common;
+    public static readonly TransmissionType Manual = new(1, nameof(Manual));
+    public static readonly TransmissionType Automatic = new(2, nameof(Automatic));
 
-    public class TransmissionType : Enumeration
+    private TransmissionType(int value)
+        : base(value, FromValue<TransmissionType>(value).Name)
     {
-        public static readonly TransmissionType Manual = new TransmissionType(1, nameof(Manual));
-        public static readonly TransmissionType Automatic = new TransmissionType(2, nameof(Automatic));
+    }
 
-        private TransmissionType(int value)
-            : base(value, FromValue<TransmissionType>(value).Name)
-        {
-        }
-
-        private TransmissionType(int value, string name)
-            : base(value, name)
-        {
-        }
+    private TransmissionType(int value, string name)
+        : base(value, name)
+    {
     }
 }

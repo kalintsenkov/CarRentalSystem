@@ -1,7 +1,6 @@
-﻿namespace CarRentalSystem.Application.Contracts
+﻿namespace CarRentalSystem.Application.Contracts;
+
+public interface ICurrentUser
 {
-    public interface ICurrentUser
-    {
-        string UserId { get; }
-    }
+    string UserId { get; }
 }
